@@ -9,8 +9,6 @@ import com.example.ebox22.Wallbox
 
 @SuppressLint("UseSwitchCompatOrMaterialCode")
 class MainActivity() : AppCompatActivity() {
-    var chargeSwitch = findViewById<Switch>(R.id.switch_charge)
-    var wb: Wallbox = Wallbox()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,6 +16,8 @@ class MainActivity() : AppCompatActivity() {
     }
 
     fun loadSwitchToggled(view: View) {
+        var chargeSwitch = findViewById<Switch>(R.id.switch_charge)
+        var wb: Wallbox = Wallbox()
         chargeSwitch.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 wb.startCharging()
