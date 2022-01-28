@@ -5,6 +5,7 @@ enum class State {
 }
 
 class Wallbox {
+    var wbKeba = WallboxKeba()
     var status: State = State.UNPLUGGED
         private set
     init {
@@ -26,6 +27,8 @@ class Wallbox {
     }
 
     private fun getWbInfo(): String {
+        val info = wbKeba.getStatus()
+
         return "is_plugged"
     }
 
