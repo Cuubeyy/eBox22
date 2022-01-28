@@ -13,14 +13,16 @@ class Wallbox {
 
     private fun updateInfo(): State {
         val info = getWbInfo()
-        if (info.contains("is_plugged")) {
+        return if (info.contains("is_plugged")) {
             if (info.contains("is_charging")) {
-                return State.CHARGING
+                State.CHARGING
             } else {
-                return State.IDLE
+                State.IDLE
             }
         }
-        return State.UNPLUGGED
+        else {
+            State.UNPLUGGED
+        }
     }
 
     private fun getWbInfo(): String {

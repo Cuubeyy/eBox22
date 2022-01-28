@@ -19,17 +19,18 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/text_charchingState"
+            android:id="@+id/text_chargingState"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TextView"
+            android:text="@string/chargingStateText"
             tools:text="@string/text_charchingState" />
 
         <Switch
             android:id="@+id/switch_charge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="63dp"
+            android:layout_height="37dp"
             android:checked="false"
+            android:onClick="loadSwitchToggled"
             tools:ignore="UseSwitchCompatOrMaterialXml" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
