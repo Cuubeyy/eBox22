@@ -8,7 +8,7 @@ import android.widget.Switch
 
 @SuppressLint("UseSwitchCompatOrMaterialCode")
 class MainActivity() : AppCompatActivity() {
-    private val chargeSwitch: Switch by lazy {findViewById<Switch>(R.id.switch_charge)}
+    private val chargeSwitch: Switch by lazy {findViewById(R.id.switch_charge)}
     private val wb: Wallbox = Wallbox()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -17,8 +17,6 @@ class MainActivity() : AppCompatActivity() {
     }
 
     fun loadSwitchToggled(view: View) {
-        //val chargeSwitch = findViewById<Switch>(R.id.switch_charge)
-        //val wb: Wallbox
         chargeSwitch.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 wb.startCharging()
