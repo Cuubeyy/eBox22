@@ -5,31 +5,18 @@ enum class State {
 }
 
 class Wallbox {
-    var wbKeba = WallboxKeba()
-    var status: State = State.UNPLUGGED
-        private set
+    private var wbKeba = WallboxKeba()
+    private var status: State = State.IDLE
     init {
-        status = this.updateInfo()
+        updateWbState()
     }
 
-    private fun updateInfo(): State {
-        val info = getWbInfo()
-        return if (info.contains("is_plugged")) {
-            if (info.contains("is_charging")) {
-                State.CHARGING
-            } else {
-                State.IDLE
-            }
-        }
-        else {
-            State.UNPLUGGED
-        }
-    }
-
-    private fun getWbInfo(): String {
-        val info = wbKeba.getStatus()
-
-        return "is_plugged"
+    fun updateWbState(): String {
+        return status.name
+        status = wbKeba.getStatus()
+        val stateStr = status.name
+        println("  new status: ${stateStr}")
+        return stateStr
     }
 
     fun startCharging(): Boolean {

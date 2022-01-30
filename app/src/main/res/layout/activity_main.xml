@@ -22,13 +22,12 @@
             android:id="@+id/text_chargingState"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/chargingStateText"
-            tools:text="@string/text_charchingState" />
+            android:text="TextView" />
 
         <Switch
             android:id="@+id/switch_charge"
-            android:layout_width="63dp"
-            android:layout_height="37dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:checked="false"
             android:onClick="loadSwitchToggled"
             tools:ignore="UseSwitchCompatOrMaterialXml" />

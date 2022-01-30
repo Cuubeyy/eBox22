@@ -4,6 +4,7 @@ import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.InetAddress
 import java.net.SocketTimeoutException
+import java.util.*
 
 class WallboxKeba(_ip:String = "192.168.178.6", _port: Int = 7090) {
     private val port = _port
@@ -49,15 +50,18 @@ class WallboxKeba(_ip:String = "192.168.178.6", _port: Int = 7090) {
             println(" converting " + bytes + " to " + bytes.toString(Charsets.UTF_8))
             answer = bytes.toString(Charsets.UTF_8)
         } catch (e: SocketTimeoutException){
-            val answ = "[B@ed4d550"
+            val stateId = Random().nextInt(8)
+            //val answ = "[B@ed4d550"
+            val answ = """{"ID": "2", "State": ${stateId}, "Error1": 0, "Curr HW": 16000}"""
             val bytes = answ.toByteArray(Charsets.ISO_8859_1)
             println(" converting " + bytes + " to " + bytes.toString(Charsets.UTF_8))
             answer = bytes.toString(Charsets.UTF_8)
         }
         return answer
     }
-    fun getStatus(): String {
+    fun getStatus(): State {
         val reply = getMessageReply("report 100")
-        return reply
+        val random_id = Random().nextInt(State.values().size)
+        return State.values()[random_id]
     }
 }

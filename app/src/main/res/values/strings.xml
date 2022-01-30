@@ -1,6 +1,3 @@
 <resources>
-    <string name="app_name">eBox22</string>
-    <string name="text_charchingState">unplugged</string>
-    <string name="chargingStateText">TextView</string>
-
+    <string name="app_name">EBox22</string>
 </resources>
