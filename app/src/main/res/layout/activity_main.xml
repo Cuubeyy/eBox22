@@ -7,14 +7,12 @@
     tools:context=".MainActivity">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="139dp"
-        android:layout_marginBottom="565dp"
+        android:id="@+id/linearLayout"
+        android:layout_width="362dp"
+        android:layout_height="109dp"
+        android:layout_marginTop="4dp"
         android:gravity="center"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.84"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -22,14 +20,45 @@
             android:id="@+id/text_chargingState"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:text="@string/textview1" />
 
         <Switch
             android:id="@+id/switch_charge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="false"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
             android:onClick="loadSwitchToggled"
             tools:ignore="UseSwitchCompatOrMaterialXml" />
+
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/LinearLayout"
+        android:layout_width="361dp"
+        android:layout_height="459dp"
+        android:layout_marginTop="40dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+
+        <Switch
+            android:id="@+id/switch_production"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="ProductionMode" />
+
+        <TextView
+            android:id="@+id/text_logMessages"
+            android:layout_width="344dp"
+            android:layout_height="423dp"
+            android:text="@string/textview2"
+            android:scrollbars = "vertical"
+            />
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
