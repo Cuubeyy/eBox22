@@ -7,6 +7,7 @@ import android.text.method.ScrollingMovementMethod
 import android.view.View
 import android.widget.Switch
 import android.widget.TextView
+import java.lang.Exception
 
 @SuppressLint("UseSwitchCompatOrMaterialCode")
 class MainActivity() : AppCompatActivity() {
@@ -26,21 +27,25 @@ class MainActivity() : AppCompatActivity() {
     }
 
     fun loadSwitchToggled(view: View) {
-        logText.text = wb.getLog()
-        productionSwitch.setOnCheckedChangeListener { _, isChecked ->
-            wb.toggleSimulate()
+        try {
             logText.text = wb.getLog()
-        }
-        chargeSwitch.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                wb.startCharging()
-                logText.text = wb.getLog()
-            } else {
-                wb.stopCharging()
+            productionSwitch.setOnCheckedChangeListener { _, isChecked ->
+                wb.toggleSimulate()
                 logText.text = wb.getLog()
             }
-            chargingStateText.text = wb.updateWbState()
-            logText.text = wb.getLog()
+            chargeSwitch.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) {
+                    wb.startCharging()
+                    logText.text = wb.getLog()
+                } else {
+                    wb.stopCharging()
+                    logText.text = wb.getLog()
+                }
+                chargingStateText.text = wb.updateWbState()
+                logText.text = wb.getLog()
+            }
+        } catch (e: Exception) {
+            logText.text = e.toString()
         }
     }
 }

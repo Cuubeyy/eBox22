@@ -1,10 +1,13 @@
 package com.example.ebox22
 
+import android.util.Log
+
 enum class State {
     UNPLUGGED, IDLE, CHARGING
 }
 
 class Wallbox {
+    private val logTag = "Wallbox"
     private var simulate: Boolean = true
     private var wbKeba = WallboxKeba()
     private var status: State = State.IDLE
@@ -27,7 +30,7 @@ class Wallbox {
 
         lastLog += "${status.name}\n"
         val stateStr = status.name
-        println("  new status: ${stateStr}")
+        Log.d(logTag, "  new status: ${stateStr}")
         return stateStr
     }
 
@@ -62,7 +65,7 @@ class Wallbox {
 
         lastLog += wbKeba.startCharging()
 
-        //Thread.sleep(500)
+        Thread.sleep(2000)
         status = wbKeba.getStatus()
         return status == State.CHARGING
     }
@@ -71,7 +74,7 @@ class Wallbox {
         if (this.simulate) return true
 
         lastLog += wbKeba.stopCharging()
-        //Thread.sleep(500)
+        Thread.sleep(2000)
         status = wbKeba.getStatus()
         return status == State.IDLE
     }
