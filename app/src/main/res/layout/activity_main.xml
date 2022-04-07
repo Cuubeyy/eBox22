@@ -6,59 +6,58 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="362dp"
-        android:layout_height="109dp"
-        android:layout_marginTop="4dp"
-        android:gravity="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/text_chargingState"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/textview1" />
-
-        <Switch
-            android:id="@+id/switch_charge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="false"
-            android:minWidth="48dp"
-            android:minHeight="48dp"
-            android:onClick="loadSwitchToggled"
-            tools:ignore="UseSwitchCompatOrMaterialXml" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/LinearLayout"
-        android:layout_width="361dp"
-        android:layout_height="459dp"
-        android:layout_marginTop="40dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
-
-        <Switch
-            android:id="@+id/switch_production"
+        <LinearLayout
+            android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="ProductionMode" />
+            android:layout_marginTop="4dp"
+            android:orientation="vertical"
+            android:gravity="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+            <!-- android:layout_width="362dp"
+            android:layout_height="109dp" -->
 
-        <TextView
-            android:id="@+id/text_logMessages"
-            android:layout_width="344dp"
-            android:layout_height="423dp"
-            android:text="@string/textview2"
-            android:scrollbars = "vertical"
-            />
-    </LinearLayout>
+            <Switch
+                android:id="@+id/switch_charge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/textview1"
+                android:checked="false"
+                android:minWidth="48dp"
+                android:minHeight="48dp"
+                tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+            <Switch
+                android:id="@+id/switch_production"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/productionMode"
+                tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+            <TextView
+                android:id="@+id/text_logMessages"
+                android:layout_width="344dp"
+                android:layout_height="457dp"
+                android:gravity="bottom"
+                android:scrollbars="vertical"
+                android:text="@string/textview2" />
+
+            <TextView
+                android:id="@+id/text_energy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/textEnergy" />
+
+        </LinearLayout>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

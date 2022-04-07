@@ -13,7 +13,7 @@ class ExampleUnitTest {
     @Test
     fun wallboxConnectionWorks() {
         val wb: Wallbox = Wallbox()
-        assertEquals(wb.updateWbState(), State.IDLE.name)
+        assertEquals(wb.updateWbState(), State.IDLE)
     }
 
     @Test
@@ -27,7 +27,7 @@ class ExampleUnitTest {
         wb.getLog()
         val status = wb.updateWbState()
         wb.getLog()
-        assertEquals(status,"IDLE")
+        assertEquals(status,State.IDLE)
     }
 
     @Test

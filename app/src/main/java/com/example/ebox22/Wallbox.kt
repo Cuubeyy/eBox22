@@ -21,8 +21,8 @@ class Wallbox {
         lastLog += "simulate: $simulate\n"
     }
 
-    fun updateWbState(): String {
-        if (this.simulate) return status.name
+    fun updateWbState(): State {
+        if (this.simulate) return status
 
         lastLog += "getting Status\n"
 
@@ -31,7 +31,7 @@ class Wallbox {
         lastLog += "${status.name}\n"
         val stateStr = status.name
         Log.d(logTag, "  new status: ${stateStr}")
-        return stateStr
+        return status
     }
 
     fun startCharging(): Boolean {
