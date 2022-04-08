@@ -62,7 +62,6 @@ class MainActivity() : AppCompatActivity() {
     fun getEnergy(): String {
         val infoStringBuilder = StringBuilder()
         val energyMarketData = EnergyMarketData(7)
-        return "Emil hat\nCorona"
         //energyMarketData.printMinMax()
         val (renewable, conventional) = energyMarketData.getCurrentEnergyMix()
         infoStringBuilder.append("$renewable, $conventional: ${renewable/(renewable+conventional)}\n")

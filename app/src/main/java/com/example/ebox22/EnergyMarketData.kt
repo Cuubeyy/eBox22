@@ -7,6 +7,7 @@ import org.apache.commons.csv.CSVParser
 import java.io.BufferedReader
 import java.io.DataOutputStream
 import java.io.InputStreamReader
+import java.io.StringReader
 import java.net.HttpURLConnection
 import java.net.URL
 import java.text.DecimalFormat
@@ -61,13 +62,9 @@ enum class EnergyPriceTypes(val id: Long) {
 }
 
 class EnergyMarketData(var offsetInDays: Int = 2) {
-    //private val productionData = parseProduction(getMarketProduction())
-    //private val priceData = parseCSVData<EnergyPriceTypes>(getMarketPrices())
-    //private val consumptionData = parseConsumption(getMarkedConsumption())
-
-    private val productionData = ArrayList<MutableList<Any>>()
-    private val priceData = ArrayList<MutableList<Any>>()
-    private val consumptionData = ArrayList<MutableList<Any>>()
+    private val productionData = parseProduction(getMarketProduction())
+    private val priceData = parseCSVData<EnergyPriceTypes>(getMarketPrices())
+    private val consumptionData = parseConsumption(getMarkedConsumption())
 
     private fun parseProduction(csvParser: CSVParser): MutableList<MutableList<Any>> {
         val dataStructure: MutableList<MutableList<Any>> = ArrayList<MutableList<Any>>()
@@ -163,11 +160,12 @@ class EnergyMarketData(var offsetInDays: Int = 2) {
             conn.setRequestProperty("Content-Length", postData.length.toString())
             conn.useCaches = false
             DataOutputStream(conn.outputStream).use { it.writeBytes(postData) }
-            BufferedReader(InputStreamReader(conn.inputStream))
+            val bufferedReader = BufferedReader(InputStreamReader(conn.inputStream))
+            val content = bufferedReader.use(BufferedReader::readText)
+            CSVParser(StringReader(content), CSVFormat.DEFAULT.withDelimiter(';').withFirstRecordAsHeader())
         }
         val future = Executors.newSingleThreadExecutor().submit(callable)
-        val bufferedReader = future.get()
-        return CSVParser(bufferedReader, CSVFormat.DEFAULT.withDelimiter(';').withFirstRecordAsHeader())
+        return future.get()
     }
 
     private fun getToday(offset: Int = 0): Long {
