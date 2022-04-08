@@ -64,9 +64,9 @@ class MainActivity() : AppCompatActivity() {
         val energyMarketData = EnergyMarketData(7)
         //energyMarketData.printMinMax()
         val (renewable, conventional) = energyMarketData.getCurrentEnergyMix()
-        infoStringBuilder.append("$renewable, $conventional: ${renewable/(renewable+conventional)}\n")
+        infoStringBuilder.append("renewable: $renewable, conv: $conventional: %.1f%%\n".format(renewable/(renewable+conventional)*100))
         val load = energyMarketData.getCurrentLoad()
-        infoStringBuilder.append("$load: ${renewable + conventional - load}")
+        infoStringBuilder.append("total load: $load, excess: ${renewable + conventional - load}")
         return infoStringBuilder.toString()
     }
 }
