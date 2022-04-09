@@ -17,115 +17,92 @@ import java.util.concurrent.Executors
 import kotlin.collections.ArrayList
 import kotlin.reflect.typeOf
 
-enum class EnergyProductionTypes(val id: Long, val isRenewable: Boolean) {
-    DATE(0, false),
-    TIME_OF_DAY(1, false),
-    BIOMASS(1001224,true),
-    HYDROPOWER(1004066,true),
-    WIND_OFFSHORE(1004067,true),
-    WIND_ONSHORE(1004068,true),
-    PHOTOVOLTAICS(1001223,true),
-    OTHER_RENEWABLE(1004069,true),
-    NUCLEAR(1004071,false),
-    LIGNITE(1004070,false),
-    HARD_COLE(1001226,false),
-    FOSSIL_GAS(1001228,false),
-    HYDRO_PUMPED_STORAGE_OUT(1001227,true),
-    OTHER_CONVENTIONAL(1001225, false)
+interface EnergyCommonTypes {
+    val ordinal: Int
+    val id: Long
+    val headerName: String
+    fun values(): Array<EnergyCommonTypes>
 }
 
-enum class EnergyConsumptionTypes(val id: Long) {
-    DATE(0),
-    TIME_OF_DAY(1),
-    TOTAL_GRID_LOAD(5000410),
-    RESIDUAL_LOAD(5004387),
-    HYDRO_PUMPED_STORAGE_IN(5004359)
-}
-enum class EnergyPriceTypes(val id: Long) {
-    DATE(0),
-    TIME_OF_DAY(1),
-    DE_LUX(8004169),
-    DENMARK1(8004170),
-    DENMARK2(8004996),
-    FRANCE(8004997),
-    NORTH_ITALY(8000251),
-    NETHERLANDS(8000252),
-    POLAND(8000253),
-    SWEDEN4(8000254),
-    SWITZERLAND(8000255),
-    SLOVENIA(8000256),
-    CZECH_REPUBLIC(8000257),
-    HUNGARY(8000258),
-    AUSTRIA(8000259),
-    BELGIUM(8000261),
-    NORWAY2(8000262)
+enum class EnergyRegions(val region: String) {
+    DE_LU("DE-LU"),
+    DE("DE"),
+    AT("AT"),
+    LU("LU"),
+    DE_TENNET("TenneT"),
+    DE_TRANSNET_BW("TransnetBW"),
+    DE_AMPRION("Amprion"),
+    DE_50HERTZ("50Hertz"),
+    AT_APG("APG"),
+    LU_CREOS("Creos")
 }
 
-class EnergyMarketData(var offsetInDays: Int = 2) {
-    private val productionData = parseProduction(getMarketProduction())
-    private val priceData = parseCSVData<EnergyPriceTypes>(getMarketPrices())
-    private val consumptionData = parseConsumption(getMarkedConsumption())
-
-    private fun parseProduction(csvParser: CSVParser): MutableList<MutableList<Any>> {
-        val dataStructure: MutableList<MutableList<Any>> = ArrayList<MutableList<Any>>()
-        EnergyProductionTypes.values().forEach {
-            if (it.ordinal < 2) {
-                dataStructure.add(it.ordinal, ArrayList<String>() as MutableList<Any>)
-            } else {
-                dataStructure.add(it.ordinal, ArrayList<Float>() as MutableList<Any>)
-            }
-        }
-        csvParser.forEach { dataRecord ->
-            EnergyProductionTypes.values().forEach {
-                if (it.ordinal < 2) {
-                    val valueStr = dataRecord.get(it.ordinal)
-                    // TODO: convert date and time
-                    dataStructure[it.ordinal].add(valueStr)
-                } else {
-                    val valueStr = dataRecord.get(it.ordinal).replace(",", "")
-                    val value = if (valueStr == "-") {
-                        if (dataStructure[it.ordinal].isEmpty()) Float.NaN
-                        else dataStructure[it.ordinal].last() as Float
-                    } else valueStr.toFloat()
-                    dataStructure[it.ordinal].add(value)
-                }
-            }
-        }
-        return dataStructure
+enum class EnergyProductionTypes(override val id: Long, override val headerName: String, val isRenewable: Boolean) : EnergyCommonTypes {
+    DATE(0, "\uFEFFDate", false),
+    TIME_OF_DAY(1, "Time of day", false),
+    BIOMASS(1001224, "Biomass[MWh]", true),
+    HYDROPOWER(1004066, "Hydropower[MWh]", true),
+    WIND_OFFSHORE(1004067, "Wind offshore[MWh]", true),
+    WIND_ONSHORE(1004068, "Wind onshore[MWh]", true),
+    PHOTOVOLTAICS(1001223, "Photovoltaics[MWh]", true),
+    OTHER_RENEWABLE(1004069, "Other renewable[MWh]", true),
+    NUCLEAR(1004071, "Nuclear[MWh]", false),
+    LIGNITE(1004070, "Lignite[MWh]", false),
+    HARD_COAL(1001226, "Hard coal[MWh]", false),
+    FOSSIL_GAS(1001228,"Fossil gas[MWh]", false),
+    HYDRO_PUMPED_STORAGE_OUT(1001227, "Hydro pumped storage[MWh]", true),
+    OTHER_CONVENTIONAL(1001225, "Other conventional[MWh]",  false);
+    override fun values(): Array<EnergyCommonTypes> {
+        return this.values()
     }
+}
 
-    private fun parseConsumption(csvParser: CSVParser): MutableList<MutableList<Any>> {
-        val dataStructure: MutableList<MutableList<Any>> = ArrayList<MutableList<Any>>()
-        EnergyConsumptionTypes.values().forEach {
-            if (it.ordinal < 2) {
-                dataStructure.add(it.ordinal, ArrayList<String>() as MutableList<Any>)
-            } else {
-                dataStructure.add(it.ordinal, ArrayList<Float>() as MutableList<Any>)
-            }
-        }
-        csvParser.forEach { dataRecord ->
-            EnergyConsumptionTypes.values().forEach {
-                if (it.ordinal < 2) {
-                    val valueStr = dataRecord.get(it.ordinal)
-                    // TODO: convert date and time
-                    dataStructure[it.ordinal].add(valueStr)
-                } else {
-                    val valueStr = dataRecord.get(it.ordinal).replace(",", "")
-                    val value = if (valueStr == "-") {
-                        if (dataStructure[it.ordinal].isEmpty()) Float.NaN
-                        else dataStructure[it.ordinal].last() as Float
-                    } else valueStr.toFloat()
-                    dataStructure[it.ordinal].add(value)
-                }
-            }
-        }
-        return dataStructure
+enum class EnergyConsumptionTypes(override val id: Long, override val headerName: String) : EnergyCommonTypes {
+    DATE(0, "\uFEFFDate"),
+    TIME_OF_DAY(1, "Time of day"),
+    TOTAL_GRID_LOAD(5000410, "Total (grid load)[MWh]"),
+    RESIDUAL_LOAD(5004387, "Residual load[MWh]"),
+    HYDRO_PUMPED_STORAGE_IN(5004359, "Hydro pumped storage[MWh]");
+    override fun values(): Array<EnergyCommonTypes> {
+        return this.values()
     }
+}
 
-    inline fun <reified T: Enum<T>> parseCSVData(csvParser: CSVParser): MutableList<MutableList<Any>> {
+enum class EnergyPriceTypes(override val id: Long, override val headerName: String) : EnergyCommonTypes {
+    DATE(0, "\uFEFFDate"),
+    TIME_OF_DAY(1, "Time of day"),
+    DE_LUX(8004169, "Germany/Luxembourg[€/MWh]"),
+    DENMARK1(8004170, "Denmark 1[€/MWh]"),
+    DENMARK2(8004996, "Denmark 2[€/MWh]"),
+    FRANCE(8004997, "France[€/MWh]"),
+    NORTH_ITALY(8000251, "Northern Italy[€/MWh]"),
+    NETHERLANDS(8000252, "Netherlands[€/MWh]"),
+    POLAND(8000253, "Poland[€/MWh]"),
+    SWEDEN4(8000254, "Sweden 4[€/MWh]"),
+    SWITZERLAND(8000255, "Switzerland[€/MWh]"),
+    SLOVENIA(8000256, "Slovenia[€/MWh]"),
+    CZECH_REPUBLIC(8000257, "Czech Republic[€/MWh]"),
+    HUNGARY(8000258, "Hungary[€/MWh]"),
+    AUSTRIA(8000259, "Austria[€/MWh]"),
+    //DE/AT/LU[€/MWh]
+    BELGIUM(8000261, "Belgium[€/MWh]"),
+    NORWAY2(8000262, "Norway 2[€/MWh]");
+    override fun values(): Array<EnergyCommonTypes> {
+        return this.values()
+    }
+}
+
+class EnergyMarketData(val offsetInDays: Int = 2, val region: EnergyRegions = EnergyRegions.DE) {
+    private val productionData = parseCSVData(getMarketProduction(), EnergyProductionTypes.values() as Array<EnergyCommonTypes>)
+    private val priceData = parseCSVData(getMarketPrices(), EnergyPriceTypes.values() as Array<EnergyCommonTypes>)
+    private val consumptionData = parseCSVData(getMarkedConsumption(), EnergyConsumptionTypes.values() as Array<EnergyCommonTypes>)
+
+    //inline fun <reified T: EnergyCommonTypes> parseCSVData(csvParser: CSVParser): MutableList<MutableList<Any>> {
+    fun parseCSVData(csvParser: CSVParser, enumValues: Array<EnergyCommonTypes>): MutableList<MutableList<Any>> {
+        //val csvRecords: List<CSVRecord> = csvParser.records
+        val headerMap: Map<String, Int> = csvParser.headerMap
         val dataStructure: MutableList<MutableList<Any>> = ArrayList<MutableList<Any>>()
-        //EnergyPriceTypes.values().forEach {
-        enumValues<T>().forEach {
+        enumValues.forEach {
             if (it.ordinal < 2) {
                 dataStructure.add(it.ordinal, ArrayList<String>() as MutableList<Any>)
             } else {
@@ -133,18 +110,23 @@ class EnergyMarketData(var offsetInDays: Int = 2) {
             }
         }
         csvParser.forEach { dataRecord ->
-            enumValues<T>().forEach {
-                if (it.ordinal < 2) {
-                    val valueStr = dataRecord.get(it.ordinal)
-                    // TODO: convert date and time
-                    dataStructure[it.ordinal].add(valueStr)
+            enumValues.forEach { it ->
+                if (it.headerName !in headerMap) {
+                    dataStructure[it.ordinal].add(0f)
                 } else {
-                    val valueStr = dataRecord.get(it.ordinal).replace(".", "").replace(',', '.')
-                    val value = if (valueStr == "-") {
-                        if (dataStructure[it.ordinal].isEmpty()) Float.NaN
-                        else dataStructure[it.ordinal].last() as Float
-                    } else valueStr.toFloat()
-                    dataStructure[it.ordinal].add(value)
+                    val columnId = headerMap.getValue(it.headerName)
+                    if (it.ordinal < 2) {
+                        val valueStr = dataRecord.get(it.ordinal)
+                        // TODO: convert date and time
+                        dataStructure[it.ordinal].add(valueStr)
+                    } else {
+                        val valueStr = dataRecord.get(columnId).replace(",", "")//.replace('.', ',')
+                        val value = if (valueStr == "-") {
+                            if (dataStructure[it.ordinal].isEmpty()) 0f
+                            else dataStructure[it.ordinal].last() as Float
+                        } else valueStr.toFloat()
+                        dataStructure[it.ordinal].add(value)
+                    }
                 }
             }
         }
@@ -190,7 +172,7 @@ class EnergyMarketData(var offsetInDays: Int = 2) {
         val (timestampStart, timestampEnd) = getTimestamps()
         val url = URL("https://www.smard.de/nip-download-manager/nip/download/market-data")
         val moduleIds = EnergyPriceTypes.values().filter{it.id > 1}.joinToString(separator=",") { it.id.toString() }
-        val postData = "{\"request_form\":[{\"format\":\"CSV\",\"moduleIds\":[$moduleIds],\"region\":\"DE-LU\",\"timestamp_from\":$timestampStart,\"timestamp_to\":$timestampEnd,\"type\":\"discrete\",\"language\":\"de\"}]}"
+        val postData = "{\"request_form\":[{\"format\":\"CSV\",\"moduleIds\":[$moduleIds],\"region\":\"DE\",\"timestamp_from\":$timestampStart,\"timestamp_to\":$timestampEnd,\"type\":\"discrete\",\"language\":\"en\"}]}"
         return getCSVData(url, postData)
     }
 
@@ -199,7 +181,7 @@ class EnergyMarketData(var offsetInDays: Int = 2) {
         val url = URL("https://www.smard.de/nip-download-manager/nip/download/market-data")
         Log.i("energy Data", "$timestampStart $timestampEnd")
         val moduleIds = EnergyProductionTypes.values().filter{it.id > 1}.joinToString(separator=",") { it.id.toString() }
-        val postData = "{\"request_form\":[{\"format\":\"CSV\",\"moduleIds\":[$moduleIds],\"region\":\"DE\",\"timestamp_from\":$timestampStart,\"timestamp_to\":$timestampEnd,\"type\":\"discrete\",\"language\":\"en\"}]}"
+        val postData = "{\"request_form\":[{\"format\":\"CSV\",\"moduleIds\":[$moduleIds],\"region\":\"${region.region}\",\"timestamp_from\":$timestampStart,\"timestamp_to\":$timestampEnd,\"type\":\"discrete\",\"language\":\"en\"}]}"
         return getCSVData(url, postData)
     }
 
@@ -208,7 +190,7 @@ class EnergyMarketData(var offsetInDays: Int = 2) {
         Log.i("energy Data","$timestampStart $timestampEnd")
         val url = URL("https://www.smard.de/nip-download-manager/nip/download/market-data")
         val moduleIds = EnergyConsumptionTypes.values().filter{it.id > 1}.joinToString(separator=",") { it.id.toString() }
-        val postData = "{\"request_form\":[{\"format\":\"CSV\",\"moduleIds\":[$moduleIds],\"region\":\"DE\",\"timestamp_from\":$timestampStart,\"timestamp_to\":$timestampEnd,\"type\":\"discrete\",\"language\":\"en\"}]}"
+        val postData = "{\"request_form\":[{\"format\":\"CSV\",\"moduleIds\":[$moduleIds],\"region\":\"${region.region}\",\"timestamp_from\":$timestampStart,\"timestamp_to\":$timestampEnd,\"type\":\"discrete\",\"language\":\"en\"}]}"
         return getCSVData(url, postData)
     }
 
@@ -296,6 +278,10 @@ class EnergyMarketData(var offsetInDays: Int = 2) {
         if ((typeOf<T>() == typeOf<EnergyPriceTypes>()) and (id <= priceData.lastIndex))
             return priceData[id].last() as Float
         return Float.NaN
+    }
+
+    fun getCurrentPricePerkWh(): Float {
+        return getCurrentValue<EnergyPriceTypes>(EnergyPriceTypes.DE_LUX.ordinal)/1000f
     }
 
     fun getCurrentLoad(): Float {

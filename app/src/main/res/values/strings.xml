@@ -3,5 +3,5 @@
     <string name="textview1">charge status</string>
     <string name="productionMode">production mode</string>
     <string name="textview2">log messages</string>
-    <string name="textEnergy">0.0 MWh</string>
+    <string name="textEnergy">0.0 GWh</string>
 </resources>
