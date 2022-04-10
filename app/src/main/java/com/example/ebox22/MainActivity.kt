@@ -1,5 +1,12 @@
 package com.example.ebox22
 
+/* TODO List
+  [.] add line graph for e.g. price history
+  [ ] add main menu
+  [ ] add config tab
+  [ ] add explanation tab
+ */
+
 import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -79,7 +86,7 @@ class MainActivity() : AppCompatActivity() {
 
     private fun getEnergy(): String {
         val infoStringBuilder = StringBuilder("region: ${region.region}\n")
-        val energyMarketData = EnergyMarketData(7, region)
+        val energyMarketData = EnergyMarketData(2, region)
         //energyMarketData.printMinMax()
         val (renewable, conventional) = energyMarketData.getCurrentEnergyMix()
         infoStringBuilder.append("renewable: %.2f GWh, conv: %.2f GWh, %.1f%%\n".format(renewable/1000f, conventional/1000f, renewable/(renewable+conventional)*100f))

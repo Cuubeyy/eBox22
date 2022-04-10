@@ -45,6 +45,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib"
     implementation group: 'org.simpleframework', name: 'simple-xml', version: '2.7.1'
     implementation 'org.apache.commons:commons-csv:1.5'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
