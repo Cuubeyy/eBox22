@@ -15,9 +15,8 @@
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="4dp"
             android:orientation="vertical"
-            android:gravity="center"
+            android:gravity="center_horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -26,45 +25,46 @@
                 android:id="@+id/switch_charge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
                 android:text="@string/textview1"
                 android:checked="false"
-                android:minWidth="48dp"
-                android:minHeight="32dp"
                 tools:ignore="UseSwitchCompatOrMaterialXml" />
 
             <Switch
                 android:id="@+id/switch_production"
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:minWidth="48dp"
-                android:minHeight="32dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
                 android:text="@string/productionMode"
                 tools:ignore="UseSwitchCompatOrMaterialXml" />
 
-            <TextView
-                android:id="@+id/text_logMessages"
-                android:layout_width="match_parent"
-                android:layout_height="250dp"
-                android:gravity="bottom"
-                android:scrollbars="vertical"
-                android:text="@string/textview2" />
-
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/lineChart"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp"
-                android:padding="9dp"
                 android:layout_width="match_parent"
-                android:layout_height="250dp" />
+                android:layout_height="250dp"
+                android:layout_marginTop="4dp"
+                android:background="@color/white" />
 
             <TextView
                 android:id="@+id/text_energy"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/textEnergy" />
+
+            <TextView
+                android:id="@+id/text_report"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TextView" />
+
+            <TextView
+                android:id="@+id/text_logMessages"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="4dp"
+                android:gravity="bottom"
+                android:scrollbars="vertical"
+                android:text="@string/textview2" />
 
         </LinearLayout>
 

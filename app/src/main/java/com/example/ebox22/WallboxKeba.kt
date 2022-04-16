@@ -86,7 +86,7 @@ class WallboxKeba(_ip:String = "192.168.178.6", _port: Int = 7090) {
             answer = bytes.toString(Charsets.UTF_8)
         } catch (e: SocketTimeoutException){
             //val answ = "[B@ed4d550"
-            val answ = """{"ERROR": "TIMEOUT", "ID": "2", "State": 3, "Error1": 0, "Curr HW": 16000, "RFID tag": "da25f9b300000000", "Plug": "7"}"""
+            val answ = """{"ERROR": "TIMEOUT", "ID": "2", "State": 3, "Error1": 0, "Curr HW": 16000, "RFID tag": "da25f9b300000000", "Plug": "7", "E pres": "700"}"""
             val bytes = answ.toByteArray(Charsets.ISO_8859_1)
             Log.d(logTag, " converting " + bytes + " to " + bytes.toString(Charsets.UTF_8))
             answer = bytes.toString(Charsets.UTF_8)
@@ -127,5 +127,12 @@ class WallboxKeba(_ip:String = "192.168.178.6", _port: Int = 7090) {
     fun stopCharging(): String {
         initializeRfidTag()
         return getMessageReply("stop $rfidTag")
+    }
+
+    fun getCurrentEnergy_kWh(): Float {
+        val reply = getMessageReply("report 100", "ID", 100)
+        val jsonReply = JSONTokener(reply).nextValue() as JSONObject
+        val ePres = jsonReply.getString("E pres").toInt()
+        return ePres/10000f
     }
 }

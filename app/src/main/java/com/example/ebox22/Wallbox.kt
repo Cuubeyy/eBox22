@@ -82,4 +82,8 @@ class Wallbox {
     fun getLog(): String {
         return this.lastLog
     }
+
+    fun getCurrentEnergy_kWh(): Float {
+        return wbKeba.getCurrentEnergy_kWh()
+    }
 }

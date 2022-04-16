@@ -280,8 +280,9 @@ class EnergyMarketData(val offsetInDays: Int = 2, val region: EnergyRegions = En
         return Float.NaN
     }
 
-    fun getPriceData(): List<Float> {
-        return priceData[EnergyPriceTypes.DE_LUX.ordinal] as List<Float>
+    fun getPriceData(priceType: EnergyPriceTypes = EnergyPriceTypes.DE_LUX): List<Float> {
+        Log.i("EnergyMarketData", "price for ${priceType.name}")
+        return priceData[priceType.ordinal] as List<Float>
     }
 
     fun getCurrentPricePerkWh(): Float {
