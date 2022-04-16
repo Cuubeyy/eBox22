@@ -44,6 +44,7 @@ class Wallbox {
             }
         }
         lastLog += "done starting to charge\n"
+        wbKeba.displayMessage("charging")
         return this.status == State.CHARGING
     }
 
@@ -57,6 +58,7 @@ class Wallbox {
             }
         }
         lastLog += "done stopping to charge\n"
+        wbKeba.displayMessage("stopped")
         return this.status == State.IDLE
     }
 

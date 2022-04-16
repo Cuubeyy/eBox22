@@ -135,4 +135,8 @@ class WallboxKeba(_ip:String = "192.168.178.6", _port: Int = 7090) {
         val ePres = jsonReply.getString("E pres").toInt()
         return ePres/10000f
     }
+
+    fun displayMessage(msg: String) {
+        getMessageReply("0 0 10 $msg")
+    }
 }
